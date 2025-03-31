@@ -60,12 +60,6 @@ def index():
 
     message = None           # Message text to display
     message_type = None      # Bulma class: 'is-success' or 'is-danger'
-    # Check for delete message
-    deleted_city = request.args.get('deleted')
-    if deleted_city:
-        message = f"{deleted_city} deleted successfully."
-        message_type = "is-danger"
-
 
     if request.method == 'POST':
         city = request.form['city']
@@ -109,8 +103,7 @@ def delete_city(city):
     c.execute("DELETE FROM cities WHERE city=?", (city,))
     conn.commit()
     conn.close()
-    safe_city = quote(city)
-    return redirect(f"/?deleted={city}")
+    return redirect('/')
 
 # Runs the Flask server locally
 if __name__ == '__main__':
