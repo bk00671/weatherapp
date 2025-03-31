@@ -5,23 +5,23 @@ import requests
 app = Flask(__name__)
 API_KEY = 'BP8GPRYV53UQ56SHJR5EFCJ77'
 
-# Matches conditions to generic OpenWeatherMap-style icons
-def get_icon_url(condition):
+# Matches weather condition keywords to a relevant icon filename
+def get_icon_filename(condition):
     condition = condition.lower()
     if "clear" in condition:
-        return "https://openweathermap.org/img/wn/01d.png"
+        return "clear-day.png"
     elif "partly cloudy" in condition:
-        return "https://openweathermap.org/img/wn/02d.png"
+        return "partly-cloudy-day.png"
     elif "cloud" in condition:
-        return "https://openweathermap.org/img/wn/03d.png"
+        return "overcast.png"
     elif "rain" in condition:
-        return "https://openweathermap.org/img/wn/09d.png"
+        return "rain.png"
     elif "snow" in condition:
-        return "https://openweathermap.org/img/wn/13d.png"
+        return "snow.png"
     elif "thunder" in condition:
-        return "https://openweathermap.org/img/wn/11d.png"
+        return "thunder.png"
     else:
-        return "https://openweathermap.org/img/wn/50d.png"  # fallback
+        return "unknown.png"
 
 # Retrieves weather data for the given city from the Visual Crossing API
 def get_weather(city):
@@ -107,4 +107,6 @@ def delete_city(city):
 
 # Runs the Flask server locally
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5050, debug=True)
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host='0.0.0.0', port=port)
