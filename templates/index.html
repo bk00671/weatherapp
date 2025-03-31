@@ -7,15 +7,21 @@
 </head>
 <body>
 
-<!-- Main header with title and Surrey logo -->
-<section class="hero is-primary">
-  <div class="hero-body">
-    <div class="container has-text-centered">
-      <img src="{{ url_for('static', filename='surrey-logo.png') }}" alt="University of Surrey Logo" style="height: 40px;">
-      <h1 class="title">My Weather Report <span id="welcome">(Unknown User)</span></h1>
+<body style="cursor: default;">
+
+  <!-- Surrey blue top bar -->
+  <section style="background-color: rgb(0,70,130); padding: 10px 20px;">
+    <img src="{{ url_for('static', filename='surrey-logo.png') }}" alt="University of Surrey Logo" style="height: 44px;">
+  </section>
+
+  <!-- Main header with title -->
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title">My Weather Report <span id="welcome">(Unknown User)</span></h1>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
 <!-- Scrolling banner for weather info (marquee style) -->
 <section class="hero is-info">
@@ -104,7 +110,7 @@
       <div class="level-right">
         <div class="level-item">
           <div class="content has-text-centered has-text-white-invert">
-            ©2024 Your Name
+            ©2024 bk00671
           </div>
         </div>
       </div>
