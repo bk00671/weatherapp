@@ -71,7 +71,7 @@
           <article class="media">
             <div class="media-left">
               <figure class="image is-64x64">
-                <img src="{{ url_for('static', filename='weather-icons/' ~ city[4]) }}" alt="Weather icon">
+                <img src="{{ city[3] }}" alt="Weather icon">
               </figure>
             </div>
             <div class="media-content">
@@ -124,7 +124,7 @@
     const greetingBox = document.getElementById('welcome');
     const user = "";  // Optional: replace with session user if available
     if (user.length !== 0) {
-      greetingBox.textContent = `(${user})`;
+      greetingBox.textContent = (${user});
     } else {
       greetingBox.textContent = "(Unknown User)";
     }
