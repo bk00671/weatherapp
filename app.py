@@ -5,23 +5,23 @@ import requests
 app = Flask(__name__)
 API_KEY = 'BP8GPRYV53UQ56SHJR5EFCJ77'
 
-# Matches weather condition keywords to a relevant icon filename
-def get_icon_filename(condition):
+# Returns a public icon URL from OpenWeatherMap based on condition text
+def get_icon_url(condition):
     condition = condition.lower()
     if "clear" in condition:
-        return "clear-day.png"
-    elif "partly cloudy" in condition:
-        return "partly-cloudy-day.png"
+        return "https://openweathermap.org/img/wn/01d@2x.png"
+    elif "partly cloudy" in condition or "partly sunny" in condition:
+        return "https://openweathermap.org/img/wn/02d@2x.png"
     elif "cloud" in condition:
-        return "overcast.png"
+        return "https://openweathermap.org/img/wn/03d@2x.png"
     elif "rain" in condition:
-        return "rain.png"
+        return "https://openweathermap.org/img/wn/09d@2x.png"
     elif "snow" in condition:
-        return "snow.png"
+        return "https://openweathermap.org/img/wn/13d@2x.png"
     elif "thunder" in condition:
-        return "thunder.png"
+        return "https://openweathermap.org/img/wn/11d@2x.png"
     else:
-        return "unknown.png"
+        return "https://openweathermap.org/img/wn/50d@2x.png"  # mist/unknown
 
 # Retrieves weather data for the given city from the Visual Crossing API
 def get_weather(city):
@@ -41,7 +41,7 @@ def get_weather(city):
         'city': city,
         'temperature': current.get('temp', 'N/A'),
         'condition': condition,
-        'icon': get_icon_filename(condition)
+        'icon': get_icon_url(condition)
     }
 
 # Main route – displays weather cards and handles form submissions
@@ -60,6 +60,12 @@ def index():
 
     message = None           # Message text to display
     message_type = None      # Bulma class: 'is-success' or 'is-danger'
+    # Check for delete message
+    deleted_city = request.args.get('deleted')
+    if deleted_city:
+        message = f"{deleted_city} deleted successfully."
+        message_type = "is-danger"
+
 
     if request.method == 'POST':
         city = request.form['city']
@@ -103,7 +109,8 @@ def delete_city(city):
     c.execute("DELETE FROM cities WHERE city=?", (city,))
     conn.commit()
     conn.close()
-    return redirect('/')
+    safe_city = quote(city)
+    return redirect(f"/?deleted={city}")
 
 # Runs the Flask server locally
 if __name__ == '__main__':
