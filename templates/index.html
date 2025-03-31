@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Weather Report</title>
+    <link rel="stylesheet" href="/static/bulma.min.css">
+</head>
+<body>
+
+<!-- Main header with title and Surrey logo -->
+<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <img src="{{ url_for('static', filename='surrey-logo.png') }}" alt="University of Surrey Logo" style="height: 40px;">
+      <h1 class="title">My Weather Report <span id="welcome">(Unknown User)</span></h1>
+    </div>
+  </div>
+</section>
+
+<!-- Scrolling banner for weather info (marquee style) -->
+<section class="hero is-info">
+  <marquee behavior="scroll" direction="left" id="cityinfo">
+    {{ marquee_message if marquee_message else "Weather data will appear here after adding a city." }}
+  </marquee>    
+</section>
+
+<!-- Background section with centered city input form -->
+<section class="section" style="background-image: url('/static/bg-banner.jpg'); background-size: cover; background-position: center;">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div class="columns is-centered">
+      <div class="column is-4">
+
+        <!-- Status box for error/success messages -->
+        {% if message %}
+          <div class="notification {{ message_type }}" style="margin-bottom: 20px;">
+            <button class="delete" onclick="this.parentElement.style.display='none'"></button>
+            {{ message }}
+          </div>
+        {% endif %}
+
+        <!-- Input form for adding a new city -->
+        <form method="POST">
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input class="input" type="text" name="city" placeholder="City Name" required>
+            </div>
+            <div class="control">
+              <button class="button is-info" type="submit">Add City</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Weather cards for each city currently being tracked -->
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-4">
+        {% for city in cities %}
+        <div class="box">
+          <article class="media">
+            <div class="media-left">
+              <figure class="image is-64x64">
+                <img src="{{ city[4] }}" alt="Weather icon">
+              </figure>
+            </div>
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  <strong>{{ city[0] }}</strong><br>
+                  <span>{{ city[1] }}° C</span><br>
+                  {{ city[2] }}
+                </p>
+              </div>
+            </div>
+            <div class="media-right">
+              <!-- Delete button to remove city from list -->
+              <form method="POST" action="{{ url_for('delete_city', city=city[0]) }}">
+                <button class="delete" type="submit"></button>
+              </form>
+            </div>                               
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer with Bulma logo and attribution -->
+<hr style="border-top: 2px solid #000000; margin-bottom: 0;">
+<footer class="footer has-background-info-light" style="padding-top: 20px; padding-bottom: 25px;">
+  <div class="container">
+    <div class="level">
+      <div class="level-left">
+        <span class="level-item">
+          Styled by &nbsp;<img src="{{ url_for('static', filename='bulma-logo.png') }}" alt="Bulma Logo" width="60">
+        </span>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="content has-text-centered has-text-white-invert">
+            ©2024 Your Name
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Script to update user greeting text -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const greetingBox = document.getElementById('welcome');
+    const user = "";  // Optional: replace with session user if available
+    if (user.length !== 0) {
+      greetingBox.textContent = `(${user})`;
+    } else {
+      greetingBox.textContent = "(Unknown User)";
+    }
+  });
+</script>
+
+</body>
+</html>
